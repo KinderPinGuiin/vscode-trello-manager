@@ -20,17 +20,20 @@
         "trello-manager.username": {
           "type": "string",
           "description": "Votre nom d'utilisateur Trello",
-          "scope": "application"
+          "scope": "application",
+          "order": 0
         },
         "trello-manager.apiKey": {
           "type": "string",
           "description": "Votre clé d'API Trello",
-          "scope": "application"
+          "scope": "application",
+          "order": 1
         },
         "trello-manager.apiToken": {
           "type": "string",
           "description": "Votre token d'API Trello",
-          "scope": "application"
+          "scope": "application",
+          "order": 2
         }
       }
     },
