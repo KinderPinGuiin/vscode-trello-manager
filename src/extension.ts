@@ -6,15 +6,17 @@ import TrelloManager from "./TrelloManager";
 // The extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 	console.info("Trello Manager is now active");
+
+  // Create the Trello user
   const user = new TrelloUser();
 
-  // Bind the commands to a function
+  // Bind the extension's commands to a function
 	// All the commands are defined in the package.json file
 	let disposable = vscode.commands.registerCommand(
 		`${TrelloManager.extensionId}.authenticate`, user.authenticate
 	);
 
-  // Bind extension events
+  // Bind the extension's events
   vscode.workspace.onDidChangeConfiguration(() => {
     TrelloManager.refreshUser(user);
   });

@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import TrelloUser from './TrelloUser';
+import { Configuration } from "./config/TrelloManagerConfig";
 
 /**
  * The TrelloManager extension main class. It allows us to access configuration,
@@ -15,7 +16,7 @@ export default class TrelloManager {
    * @param key The configuration key.
    * @returns   The value associated to the key.
    */
-  public static getConfiguration(key: string): string | undefined {
+  public static getConfiguration(key: Configuration): string | undefined {
     return vscode
       .workspace
       .getConfiguration(TrelloManager.extensionId)
@@ -28,21 +29,22 @@ export default class TrelloManager {
    * @param key   The configuration key.
    * @param value The value you want to set.
    */
-  public static setConfiguration(key: string, value: any): void {
+  public static setConfiguration(key: Configuration, value: any): void {
     vscode.workspace
       .getConfiguration(TrelloManager.extensionId)
       .update(key, value, vscode.ConfigurationTarget.Global);
   }
 
   /**
-   * Refresh the user configuration.
+   * Refresh the given Trello user.
    * 
    * @param user The user that you want to refresh.
    */
   public static refreshUser(user: TrelloUser): void {
-    user.username = TrelloManager.getConfiguration("username") ?? "";
-    user.apiKey = TrelloManager.getConfiguration("apiKey") ?? "";
-    user.apiToken = TrelloManager.getConfiguration("apiToken") ?? "";
+    // Refresh user's configuration
+    user.username = TrelloManager.getConfiguration(Configuration.Username) ?? "";
+    user.apiKey = TrelloManager.getConfiguration(Configuration.ApiKey) ?? "";
+    user.apiToken = TrelloManager.getConfiguration(Configuration.ApiToken) ?? "";
   }
 
 }

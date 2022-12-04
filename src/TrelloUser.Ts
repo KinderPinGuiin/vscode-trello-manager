@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import TrelloManager from "./TrelloManager";
+import { Configuration } from "./config/TrelloManagerConfig";
 
 /**
  * The Trello user. It contains the user's information like his boards, his 
@@ -48,9 +49,9 @@ export default class TrelloUser {
     }
 
     // Set the user credentials in configuration
-    TrelloManager.setConfiguration("username", username);		
-    TrelloManager.setConfiguration("apiKey", apiKey);		
-    TrelloManager.setConfiguration("apiToken", apiToken);	
+    TrelloManager.setConfiguration(Configuration.Username, username);		
+    TrelloManager.setConfiguration(Configuration.ApiKey, apiKey);		
+    TrelloManager.setConfiguration(Configuration.ApiToken, apiToken);	
   }
 
   public get username(): string {
