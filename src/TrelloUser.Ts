@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import TrelloManager from "./TrelloManager";
-import { Configuration } from "./config/TrelloManagerConfig";
+import { Settings } from "./config/Settings";
+import BoardDTO from "./dto/BoardDTO";
 
 /**
  * The Trello user. It contains the user's information like his boards, his 
@@ -8,20 +9,26 @@ import { Configuration } from "./config/TrelloManagerConfig";
  */
 export default class TrelloUser {
 
-  // Authentication information
+  /*
+   * Authentication information
+   */
+
   private _username: string = "";
   private _apiKey: string = "";
   private _apiToken: string = "";
 
-  public constructor() {
-    // Get the extension current configuration to refresh the user
-    TrelloManager.refreshUser(this);
-  }
+  /* 
+   * User's data
+   */
+
+  private _boards: Array<BoardDTO> = [];
 
   /**
    * Ask the user's information and authenticate him to the trello API.
+   * 
+   * @returns True if the user input was correct (Syntax), false otherwise.
    */
-  public async authenticate(): Promise<void> {
+  public async authenticate(): Promise<boolean> {
     // Ask the user information
     const username = await vscode.window.showInputBox({
       title: "Entrez votre nom d'utilisateur",
@@ -42,16 +49,15 @@ export default class TrelloUser {
       || apiKey === undefined 
       || apiToken === undefined
     ) {
-      vscode.window.showErrorMessage(
-        "Vous devez fournir un nom d'utilisateur, une clé d'API et un token "
-        + "d'API"
-      );
+      return false;
     }
 
     // Set the user credentials in configuration
-    TrelloManager.setConfiguration(Configuration.Username, username);		
-    TrelloManager.setConfiguration(Configuration.ApiKey, apiKey);		
-    TrelloManager.setConfiguration(Configuration.ApiToken, apiToken);	
+    TrelloManager.setConfiguration(Settings.Username, username);		
+    TrelloManager.setConfiguration(Settings.ApiKey, apiKey);		
+    TrelloManager.setConfiguration(Settings.ApiToken, apiToken);
+    
+    return true;
   }
 
   public get username(): string {
@@ -72,6 +78,14 @@ export default class TrelloUser {
 
   public get apiToken(): string {
     return this._apiToken;
+  }
+
+  public set boards(boards: Array<BoardDTO>) {
+    this._boards = boards;
+  }
+
+  public get boards(): Array<BoardDTO> {
+    return this._boards;
   }
 
   public set apiToken(apiToken: string) {
